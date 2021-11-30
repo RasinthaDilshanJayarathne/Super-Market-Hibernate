@@ -2,7 +2,7 @@ package controller;
 
 import dao.custom.OrderDAO;
 import dao.impl.DAOFactory;
-import entity.Order;
+import entity.Orders;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,9 +40,9 @@ public class MakePaymentFormController {
     private void loadAllOrders() {
         tblPayment.getItems().clear();
         try {
-            ArrayList<Order> arrayList = orderDAO.getAll();
-            for (Order customDTO :arrayList ) {
-                tblPayment.getItems().add(new Order(customDTO.getOrderId(),customDTO.getOrderDate(),
+            ArrayList<Orders> arrayList = orderDAO.getAll();
+            for (Orders customDTO :arrayList ) {
+                tblPayment.getItems().add(new Orders(customDTO.getOrderId(),customDTO.getOrderDate(),
                         customDTO.getOrderTime(),customDTO.getCoust(),customDTO.getCustomer()));
             }
         } catch (SQLException e) {

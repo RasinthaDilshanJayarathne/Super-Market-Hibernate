@@ -113,10 +113,13 @@ public class CustomerDAOImpl implements CustomerDAO {
         Session session = FactoryConfigeration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("SELECT id FROM Customer WHERE id=:id");
-        query.setParameter("id",id);
+        String id1 = (String) query.setParameter("id", id).uniqueResult();
+        if (id1!=null){
+            return true;
+        }
         transaction.commit();
         session.close();
-        return true;
+        return false;
     }
 
     @Override
@@ -133,15 +136,13 @@ public class CustomerDAOImpl implements CustomerDAO {
         Transaction transaction = session.beginTransaction();
         Query query = session.createSQLQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1");
         String id = (String) query.uniqueResult();
-        if (id!=null) {
-            int newCustomerId = Integer.parseInt(id.replace("C", "")) + 1;
-            id = String.format("C%03d", newCustomerId);
-
-        } else {
-            return "C001";
-        }
         transaction.commit();
         session.close();
-        return id;
+        if (id!=null) {
+            int newCustomerId = Integer.parseInt(id.replace("C", "")) + 1;
+            return String.format("C%03d", newCustomerId);
+
+        }
+        return "C001";
     }
 }

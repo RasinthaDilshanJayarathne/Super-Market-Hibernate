@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Order {
+public class Orders {
     @Id
     private String orderId;
     private LocalDate orderDate;
@@ -24,7 +24,7 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> itemList = new ArrayList();
 
-    public Order() {
+    public Orders() {
     }
 
 //    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust) {
@@ -34,7 +34,7 @@ public class Order {
 //        this.setCoust(coust);
 //    }
 
-    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer) {
+    public Orders(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer) {
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.orderTime = orderTime;
@@ -42,7 +42,7 @@ public class Order {
         this.customer = customer;
     }
 
-    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer, List<OrderDetail> itemList) {
+    public Orders(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer, List<OrderDetail> itemList) {
         this.setOrderId(orderId);
         this.setOrderDate(orderDate);
         this.setOrderTime(orderTime);

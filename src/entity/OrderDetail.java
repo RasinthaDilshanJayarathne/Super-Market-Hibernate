@@ -11,7 +11,7 @@ public class OrderDetail {
     @GeneratedValue
     private int orderDetailId;
     @ManyToOne
-    private Order order;
+    private Orders order;
     @ManyToOne
     private Item item;
     private int orderQty;
@@ -20,7 +20,7 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
-    public OrderDetail(int orderDetailId, Order order, Item item, int orderQty, double discount) {
+    public OrderDetail(int orderDetailId, Orders order, Item item, int orderQty, double discount) {
         this.setOrderDetailId(orderDetailId);
         this.setOrder(order);
         this.setItem(item);
@@ -28,7 +28,7 @@ public class OrderDetail {
         this.setDiscount(discount);
     }
 
-    public OrderDetail(Order order, Item item, int orderQty, double discount) {
+    public OrderDetail(Orders order, Item item, int orderQty, double discount) {
         this.order = order;
         this.item = item;
         this.orderQty = orderQty;
@@ -43,11 +43,11 @@ public class OrderDetail {
         this.orderDetailId = orderDetailId;
     }
 
-    public Order getOrder() {
+    public Orders getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(Orders order) {
         this.order = order;
     }
 

@@ -3,10 +3,9 @@ package bo.impl;
 import bo.custom.PurchaseOrderBO;
 import dao.custom.*;
 import dao.impl.DAOFactory;
-import db.DbConnection;
 import entity.Customer;
 import entity.Item;
-import entity.Order;
+import entity.Orders;
 import entity.OrderDetail;
 import dto.CustomerDTO;
 import dto.ItemDTO;
@@ -16,7 +15,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.validation.FactoryConfigeration;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -80,7 +78,7 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
         Transaction transaction=session.beginTransaction();
         Customer customer = session.get(Customer.class, dto.getCustomerId());
 
-        Order order = new Order(dto.getOrderId(), dto.getOrderDate(), dto.getOrderTime(), dto.getOrderTotal(),customer);
+        Orders order = new Orders(dto.getOrderId(), dto.getOrderDate(), dto.getOrderTime(), dto.getOrderTotal(),customer);
 
         OrderDetail orderDetailDTO= null;
         Item item=null;

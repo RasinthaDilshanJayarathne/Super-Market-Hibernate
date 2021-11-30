@@ -18,7 +18,7 @@ public class Customer {
     private String postalCode;
 
     @OneToMany(mappedBy = "customer")
-    private List<Order> orderList=new ArrayList();
+    private List<Orders> orderList=new ArrayList();
 
     public Customer() {
     }
@@ -33,7 +33,7 @@ public class Customer {
         this.postalCode = postalCode;
     }
 
-    public Customer(String id, String title, String name, String address, String city, String province, String postalCode, List<Order> orderList) {
+    public Customer(String id, String title, String name, String address, String city, String province, String postalCode, List<Orders> orderList) {
         this.setId(id);
         this.setTitle(title);
         this.setName(name);
@@ -100,11 +100,11 @@ public class Customer {
         this.postalCode = postalCode;
     }
 
-    public List<Order> getOrderList() {
+    public List<Orders> getOrderList() {
         return orderList;
     }
 
-    public void setOrderList(List<Order> orderList) {
+    public void setOrderList(List<Orders> orderList) {
         this.orderList = orderList;
     }
 

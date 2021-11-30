@@ -98,6 +98,7 @@ public class ItemDAOImpl implements ItemDAO {
         transaction.commit();
         session.close();
         return items;
+
     }
 
     @Override
@@ -105,13 +106,17 @@ public class ItemDAOImpl implements ItemDAO {
 /*
         return CrudUtil.executeQuery("SELECT ItemCode FROM Item WHERE ItemCode=?", code).next();
 */
+
         Session session = FactoryConfigeration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("SELECT itemCode FROM Item WHERE itemCode=:code");
-        query.setParameter("code",code);
+        String id1 = (String) query.setParameter("code", code).uniqueResult();
+        if (id1!=null){
+            return true;
+        }
         transaction.commit();
         session.close();
-        return true;
+        return false;
     }
 
     @Override
@@ -129,14 +134,12 @@ public class ItemDAOImpl implements ItemDAO {
         Transaction transaction = session.beginTransaction();
         Query query = session.createSQLQuery("SELECT itemCode FROM Item ORDER BY itemCode DESC LIMIT 1");
         String s = (String) query.uniqueResult();
-        if (s!=null) {
-            int newItemCode = Integer.parseInt(s.replace("I", "")) + 1;
-            s = String.format("I%03d", newItemCode);
-        } else {
-            return "I001";
-        }
         transaction.commit();
         session.close();
-        return s;
+        if (s!=null) {
+            int newItemCode = Integer.parseInt(s.replace("I", "")) + 1;
+            return String.format("I%03d", newItemCode);
+        }
+        return "I001";
     }
 }

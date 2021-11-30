@@ -1,22 +1,19 @@
 package dao.impl;
 
 import dao.custom.OrderDAO;
-import entity.Order;
+import entity.Orders;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.validation.FactoryConfigeration;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDAOImpl implements OrderDAO {
     @Override
-    public boolean add(Order order) throws SQLException, ClassNotFoundException {
+    public boolean add(Orders order) throws SQLException, ClassNotFoundException {
 /*
         return CrudUtil.executeUpdate("INSERT INTO Orders VALUES (?,?,?,?,?)", order.getOrderId(), order.getOrderDate(), order.getOrderTime(), order.getCustomerId(), order.getCoust());
 */
@@ -31,7 +28,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public boolean update(Order order) throws SQLException, ClassNotFoundException {
+    public boolean update(Orders order) throws SQLException, ClassNotFoundException {
         throw new UnsupportedOperationException("Not Supported Yet");
     }
 
@@ -51,7 +48,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public Order search(String s) throws SQLException, ClassNotFoundException {
+    public Orders search(String s) throws SQLException, ClassNotFoundException {
         /*ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Orders WHERE OrderId=?", s);
         rst.next();
         return new Order(
@@ -63,14 +60,14 @@ public class OrderDAOImpl implements OrderDAO {
         );*/
         Session session = FactoryConfigeration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query s1 = session.createQuery("FROM Order WHERE orderId=:s").setParameter("s", s);
-        List<Order> list = s1.list();
+        Query s1 = session.createQuery("FROM Orders WHERE orderId=:s").setParameter("s", s);
+        List<Orders> list = s1.list();
         transaction.commit();
         session.close();
 
-        Order orders = null;
-        for (Order order:list) {
-            orders=new Order(
+        Orders orders = null;
+        for (Orders order:list) {
+            orders=new Orders(
                     order.getOrderId(),order.getOrderDate(),order.getOrderTime(),order.getCoust(),order.getCustomer()
             );
         }
@@ -78,7 +75,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Orders> getAll() throws SQLException, ClassNotFoundException {
         /*ArrayList<Order> allOrders = new ArrayList();
         ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Orders");
         while (rst.next()) {
@@ -91,12 +88,12 @@ public class OrderDAOImpl implements OrderDAO {
             );
         }
         return allOrders;*/
-        ArrayList<Order> allOrders = new ArrayList();
+        ArrayList<Orders> allOrders = new ArrayList();
 
         Session session = FactoryConfigeration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query order = session.createQuery("FROM Order");
-        allOrders = (ArrayList<Order>) order.list();
+        Query order = session.createQuery("FROM Orders ");
+        allOrders = (ArrayList<Orders>) order.list();
         transaction.commit();
         session.close();
         return allOrders;
@@ -106,13 +103,17 @@ public class OrderDAOImpl implements OrderDAO {
     public boolean ifOrderExist(String oid) throws SQLException, ClassNotFoundException {
         /*ResultSet rst = CrudUtil.executeQuery("SELECT OrderId FROM Orders WHERE OrderId=?", oid);
         return rst.next();*/
+
         Session session = FactoryConfigeration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("SELECT orderId FROM Order WHERE orderId=:oid");
-        query.setParameter("oid",oid);
+        Query query = session.createQuery("SELECT orderId FROM Orders WHERE orderId=:oid");
+        String id1 = (String) query.setParameter("oid", oid).uniqueResult();
+        if (id1!=null){
+            return true;
+        }
         transaction.commit();
         session.close();
-        return true;
+        return false;
     }
 
     @Override
@@ -122,16 +123,14 @@ public class OrderDAOImpl implements OrderDAO {
 
         Session session = FactoryConfigeration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createSQLQuery("SELECT orderId FROM Order ORDER BY orderId DESC LIMIT 1");
+        Query query = session.createSQLQuery("SELECT orderId FROM Orders ORDER BY orderId DESC LIMIT 1");
         String s = (String) query.uniqueResult();
-        if (s!=null) {
-            int orderId = Integer.parseInt(s.replace("O", "")) + 1;
-            s = String.format("O%03d", orderId);
-        } else {
-            return "O001";
-        }
         transaction.commit();
         session.close();
-        return s;
+        if (s!=null) {
+            int orderId = Integer.parseInt(s.replace("O", "")) + 1;
+            return String.format("O%03d", orderId);
+        }
+        return "O001";
     }
 }
