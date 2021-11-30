@@ -43,7 +43,7 @@ public class MakePaymentFormController {
             ArrayList<Order> arrayList = orderDAO.getAll();
             for (Order customDTO :arrayList ) {
                 tblPayment.getItems().add(new Order(customDTO.getOrderId(),customDTO.getOrderDate(),
-                        customDTO.getOrderTime(),customDTO.getCustomerId(),customDTO.getCoust()));
+                        customDTO.getOrderTime(),customDTO.getCoust(),customDTO.getCustomer()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();

@@ -12,6 +12,9 @@ import dto.CustomerDTO;
 import dto.ItemDTO;
 import dto.OrderDTO;
 import dto.OrderDetailDTO;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import util.validation.FactoryConfigeration;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,18 +30,18 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
 
     @Override
     public boolean purchaseOrder(OrderDTO dto) throws SQLException, ClassNotFoundException {
-        /*Transaction*/
+        /*Transaction*//*
                 Connection connection = null;
 
         connection = DbConnection.getInstance().getConnection();
         boolean orderAvailable = orderDAO.ifOrderExist(dto.getOrderId());
-        /*if order id already exist*/
+        *//*if order id already exist*//*
         if (orderAvailable) {
             return false;
         }
 
         connection.setAutoCommit(false);
-       /* Add Order*/
+       *//* Add Order*//*
         Order order = new Order(dto.getOrderId(), dto.getOrderDate(), dto.getOrderTime(), dto.getCustomerId(),
                 dto.getOrderTotal());
         boolean orderAdded = orderDAO.add(order);
@@ -71,6 +74,29 @@ public class PurchaseOrderBOImpl implements PurchaseOrderBO {
         //if every thing ok
         connection.commit();
         connection.setAutoCommit(true);
+        return true;*/
+
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction=session.beginTransaction();
+        Customer customer = session.get(Customer.class, dto.getCustomerId());
+
+        Order order = new Order(dto.getOrderId(), dto.getOrderDate(), dto.getOrderTime(), dto.getOrderTotal(),customer);
+
+        OrderDetail orderDetailDTO= null;
+        Item item=null;
+        for (OrderDetailDTO detail : dto.getOrderDetail()) {
+            item = session.get(Item.class, detail.getItemCode());
+
+            orderDetailDTO = new OrderDetail(order,item,detail.getOrderQty(),detail.getDiscount());
+            int remainQty = item.getQtyOnHand() - detail.getOrderQty();
+            item.setQtyOnHand(remainQty);
+        }
+        session.save(order);
+        session.save(orderDetailDTO);
+        session.update(item);
+        transaction.commit();
+        session.close();
+
         return true;
     }
 

@@ -24,3 +24,15 @@ SELECT o.OrderId,o.OrderDate,o.CustId,o.Cost,od.ItemCode,od.OrderQty,od.Discount
 SELECT o.OrderId,o.OrderDate,o.CustId,o.Cost,od.ItemCode,od.OrderQty,od.Discount FROM orders o INNER JOIN orderdetail od ON o.OrderId = od.OrderId WHERE o.OrderId='OD007';
 
 SELECT o.OrderId,o.OrderDate,o.CustId,od.OrderId,od.ItemCode,od.OrderQty FROM Orders o INNER JOIN orderdetail od ON o.OrderId=od.OrderId WHERE o.OrderId=?
+
+DROP TABLE IF EXISTS Login;
+CREATE TABLE IF NOT EXISTS Login(
+    UserName VARCHAR (15),
+    PassWord VARCHAR(45),
+    CONSTRAINT PRIMARY KEY (UserName)
+    );
+SHOW TABLES ;
+DESCRIBE Login;
+
+INSERT INTO Login VALUES ('Admin','1234');
+INSERT INTO Login VALUES ('Cashier','1234');

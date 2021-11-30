@@ -2,6 +2,9 @@ package dao.impl;
 
 import dao.custom.LoginDAO;
 import entity.Login;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import util.validation.FactoryConfigeration;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,17 +13,47 @@ import java.util.ArrayList;
 public class LoginDAOImpl implements LoginDAO {
     @Override
     public boolean add(Login login) throws SQLException, ClassNotFoundException {
+/*
         throw new UnsupportedOperationException("Not Supported Yet");
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.save(login);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public boolean update(Login login) throws SQLException, ClassNotFoundException {
+/*
         throw new UnsupportedOperationException("Not Supported Yet");
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.update(login);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public boolean delete(String s) throws SQLException, ClassNotFoundException {
+/*
         throw new UnsupportedOperationException("Not Supported Yet");
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.delete(s);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override

@@ -1,6 +1,9 @@
 package entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -19,16 +22,24 @@ public class Order {
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
-    private List<Item>itemList=new ArrayList();
+    private List<Item> itemList = new ArrayList();
 
     public Order() {
     }
 
-    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust) {
-        this.setOrderId(orderId);
-        this.setOrderDate(orderDate);
-        this.setOrderTime(orderTime);
-        this.setCoust(coust);
+//    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust) {
+//        this.setOrderId(orderId);
+//        this.setOrderDate(orderDate);
+//        this.setOrderTime(orderTime);
+//        this.setCoust(coust);
+//    }
+
+    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer) {
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.orderTime = orderTime;
+        this.coust = coust;
+        this.customer = customer;
     }
 
     public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer, List<Item> itemList) {

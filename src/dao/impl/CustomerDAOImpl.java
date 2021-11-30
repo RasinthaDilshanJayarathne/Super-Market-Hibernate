@@ -2,6 +2,9 @@ package dao.impl;
 
 import dao.custom.CustomerDAO;
 import entity.Customer;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import util.validation.FactoryConfigeration;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,17 +13,47 @@ import java.util.ArrayList;
 public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public boolean add(Customer customer) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeUpdate("INSERT INTO Customer VALUES(?,?,?,?,?,?,?)", customer.getId(), customer.getTitle(),customer.getName(),customer.getAddress(),customer.getCity(),customer.getProvince(),customer.getPostalCode());
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.save(customer);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public boolean update(Customer customer) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeUpdate("UPDATE Customer SET CustTitle=?, CustName=?, CustAddress=?, City=?, Province=?, PostalCode=? WHERE CustId=?",customer.getTitle(),customer.getName(),customer.getAddress(),customer.getCity(),customer.getProvince(),customer.getPostalCode(), customer.getId());
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.update(customer);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public boolean delete(String s) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeUpdate("DELETE FROM Customer WHERE CustId=?", s);
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.delete(s);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override

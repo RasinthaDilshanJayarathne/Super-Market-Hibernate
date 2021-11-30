@@ -2,6 +2,9 @@ package dao.impl;
 
 import dao.custom.ItemDAO;
 import entity.Item;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import util.validation.FactoryConfigeration;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,17 +13,47 @@ import java.util.ArrayList;
 public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean add(Item item) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeUpdate("INSERT INTO Item (ItemCode, Description, PackSize, UnitPrice, QtyOnHand) VALUES (?,?,?,?,?)", item.getItemCode(), item.getDiscription(), item.getPackSize(), item.getUnitPrice(), item.getQtyOnHand());
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.save(item);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public boolean update(Item item) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeUpdate("UPDATE Item SET Description=?, PackSize=?, UnitPrice=?, QtyOnHand=? WHERE ItemCode=?", item.getDiscription(), item.getPackSize(), item.getUnitPrice(), item.getQtyOnHand(),item.getItemCode());
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.update(item);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public boolean delete(String s) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeUpdate("DELETE FROM Item WHERE ItemCode=?", s);
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.delete(s);
+
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override

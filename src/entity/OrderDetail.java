@@ -1,14 +1,15 @@
 package entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class OrderDetail {
     @Id
-    private
-    int orderDetailId;
+    @GeneratedValue
+    private int orderDetailId;
     @ManyToOne
     private Order order;
     @ManyToOne
@@ -25,6 +26,13 @@ public class OrderDetail {
         this.setItem(item);
         this.setOrderQty(orderQty);
         this.setDiscount(discount);
+    }
+
+    public OrderDetail(Order order, Item item, int orderQty, double discount) {
+        this.order = order;
+        this.item = item;
+        this.orderQty = orderQty;
+        this.discount = discount;
     }
 
     public int getOrderDetailId() {
