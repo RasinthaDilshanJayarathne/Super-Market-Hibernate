@@ -18,7 +18,7 @@ public class Order {
     @ManyToOne
     private Customer customer;
 
-    @OneToMany(mappedBy = "orderList")
+    @OneToMany(mappedBy = "order")
     private List<Item>itemList=new ArrayList();
 
     public Order() {

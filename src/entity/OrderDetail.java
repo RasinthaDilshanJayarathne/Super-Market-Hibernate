@@ -2,39 +2,53 @@ package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class OrderDetail {
     @Id
-    String orderId;
-    String itemCode;
-    int orderQty;
-    double discount;
+    private
+    int orderDetailId;
+    @ManyToOne
+    private Order order;
+    @ManyToOne
+    private Item item;
+    private int orderQty;
+    private double discount;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(String orderId, String itemCode, int orderQty, double discount) {
-        this.orderId = orderId;
-        this.itemCode = itemCode;
-        this.orderQty = orderQty;
-        this.discount = discount;
+    public OrderDetail(int orderDetailId, Order order, Item item, int orderQty, double discount) {
+        this.setOrderDetailId(orderDetailId);
+        this.setOrder(order);
+        this.setItem(item);
+        this.setOrderQty(orderQty);
+        this.setDiscount(discount);
     }
 
-    public String getOrderId() {
-        return orderId;
+    public int getOrderDetailId() {
+        return orderDetailId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrderDetailId(int orderDetailId) {
+        this.orderDetailId = orderDetailId;
     }
 
-    public String getItemCode() {
-        return itemCode;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public int getOrderQty() {
@@ -56,8 +70,9 @@ public class OrderDetail {
     @Override
     public String toString() {
         return "OrderDetail{" +
-                "orderId='" + orderId + '\'' +
-                ", itemCode='" + itemCode + '\'' +
+                "orderDetailId=" + orderDetailId +
+                ", order=" + order +
+                ", item=" + item +
                 ", orderQty=" + orderQty +
                 ", discount=" + discount +
                 '}';
