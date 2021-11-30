@@ -22,7 +22,7 @@ public class Order {
     private Customer customer;
 
     @OneToMany(mappedBy = "order")
-    private List<Item> itemList = new ArrayList();
+    private List<OrderDetail> itemList = new ArrayList();
 
     public Order() {
     }
@@ -42,7 +42,7 @@ public class Order {
         this.customer = customer;
     }
 
-    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer, List<Item> itemList) {
+    public Order(String orderId, LocalDate orderDate, LocalTime orderTime, double coust, Customer customer, List<OrderDetail> itemList) {
         this.setOrderId(orderId);
         this.setOrderDate(orderDate);
         this.setOrderTime(orderTime);
@@ -92,11 +92,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public List<Item> getItemList() {
+    public List<OrderDetail> getItemList() {
         return itemList;
     }
 
-    public void setItemList(List<Item> itemList) {
+    public void setItemList(List<OrderDetail> itemList) {
         this.itemList = itemList;
     }
 

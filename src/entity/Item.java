@@ -2,7 +2,6 @@ package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +16,12 @@ public class Item {
     private int qtyOnHand;
 
     @OneToMany(mappedBy = "item")
-    private List<Order>orderList=new ArrayList();
+    private List<OrderDetail>orderList=new ArrayList();
 
     public Item() {
     }
 
-    public Item(String itemCode, String discription, String packSize, double unitPrice, int qtyOnHand, List<Order> orderList) {
+    public Item(String itemCode, String discription, String packSize, double unitPrice, int qtyOnHand, List<OrderDetail> orderList) {
         this.setItemCode(itemCode);
         this.setDiscription(discription);
         this.setPackSize(packSize);
@@ -80,11 +79,11 @@ public class Item {
         this.qtyOnHand = qtyOnHand;
     }
 
-    public List<Order> getOrderList() {
+    public List<OrderDetail> getOrderList() {
         return orderList;
     }
 
-    public void setOrderList(List<Order> orderList) {
+    public void setOrderList(List<OrderDetail> orderList) {
         this.orderList = orderList;
     }
 

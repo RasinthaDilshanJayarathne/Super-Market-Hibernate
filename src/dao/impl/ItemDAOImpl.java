@@ -4,6 +4,7 @@ import dao.custom.ItemDAO;
 import entity.Item;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import util.validation.FactoryConfigeration;
 
 import java.sql.ResultSet;
@@ -58,19 +59,25 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public Item search(String s) throws SQLException, ClassNotFoundException {
-        ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item WHERE ItemCode=?", s);
+       /* ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item WHERE ItemCode=?", s);
         rst.next();
         return new Item(s,
                 rst.getString("Description"),
                 rst.getString("PackSize"),
                 rst.getDouble("UnitPrice"),
                 rst.getInt("QtyOnHand")
-        );
+        );*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+        Item item = session.get(Item.class, s);
+        transaction.commit();
+        session.close();
+        return item;
     }
 
     @Override
     public ArrayList<Item> getAll() throws SQLException, ClassNotFoundException {
-        ArrayList<Item> allItems = new ArrayList<>();
+        /*ArrayList<Item> allItems = new ArrayList<>();
         ResultSet rst = CrudUtil.executeQuery("SELECT * FROM Item");
         while (rst.next()) {
             allItems.add(new Item(
@@ -81,23 +88,55 @@ public class ItemDAOImpl implements ItemDAO {
                     rst.getInt("QtyOnHand"))
             );
         }
-        return allItems;
+        return allItems;*/
+
+        ArrayList<Item> items = new ArrayList();
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("FROM Item ");
+        items = (ArrayList<Item>) query.list();
+        transaction.commit();
+        session.close();
+        return items;
     }
 
     @Override
     public boolean ifItemExist(String code) throws SQLException, ClassNotFoundException {
+/*
         return CrudUtil.executeQuery("SELECT ItemCode FROM Item WHERE ItemCode=?", code).next();
+*/
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("SELECT itemCode FROM Item WHERE itemCode=:code");
+        query.setParameter("code",code);
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
     public String generateNewID() throws SQLException, ClassNotFoundException {
-        ResultSet rst = CrudUtil.executeQuery("SELECT ItemCode FROM Item ORDER BY ItemCode DESC LIMIT 1;");
+        /*ResultSet rst = CrudUtil.executeQuery("SELECT ItemCode FROM Item ORDER BY ItemCode DESC LIMIT 1;");
         if (rst.next()) {
             String id = rst.getString("ItemCode");
             int newItemId = Integer.parseInt(id.replace("I", "")) + 1;
             return String.format("I%03d", newItemId);
         } else {
             return "I001";
+        }*/
+
+        Session session = FactoryConfigeration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createSQLQuery("SELECT itemCode FROM Item ORDER BY itemCode DESC LIMIT 1");
+        String s = (String) query.uniqueResult();
+        if (s!=null) {
+            int newItemCode = Integer.parseInt(s.replace("I", "")) + 1;
+            s = String.format("I%03d", newItemCode);
+        } else {
+            return "I001";
         }
+        transaction.commit();
+        session.close();
+        return s;
     }
 }
